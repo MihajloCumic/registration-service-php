@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: registration-service-app
+    restart: always
+    working_dir: /var/www/
+    volumes:
+      - ../:/var/www
+  nginx:
+    image: nginx:1.19-alpine
+    container_name: registration-service-nginx
+    restart: always
+    ports:
+      - "8000:80"
+    volumes:
+      - ../:/var/www
+      - ./nginx:/etc/nginx/conf.d
+  maxmind-sim:
+    build:
+      context: ../maxmind
+      dockerfile: docker/Dockerfile
+    container_name: maxmind-sim-app
+    restart: always
+    working_dir: /var/www
+    volumes:
+      - ../maxmind/:/var/www
+    command: ["php", "-S", "0.0.0.0:9000", "-t", "public/"]
+    ports:
+      - "8001:9000"
+  db:
+    container_name: user-db
+    image: mysql:8.0
+    volumes:
+      - ./db-init/:/docker-entrypoint-initdb.d/
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
