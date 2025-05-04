@@ -1,20 +1,18 @@
 <?php
 declare(strict_types=1);
-namespace Src\repository;
+namespace Src\repository\component;
 
 use Exception;
 use Src\database\DatabaseConnection;
 
 abstract class Repository
 {
-    public function __construct(protected DatabaseConnection $db)
+    public function __construct(protected DatabaseConnection $db, protected string $table)
     {
     }
 
-    /**
-     * @throws Exception
-     */
-    protected function insert(string $table, array $data): int
+
+    protected function insert(array $data): int
     {
         $columns = [];
         $placeholders = [];
@@ -32,7 +30,7 @@ abstract class Repository
 
         }
 
-        $sql = "INSERT INTO `{$table}` (" . implode(', ', $columns) . ") VALUES (" . implode(', ', $placeholders) . ")";
+        $sql = "INSERT INTO `{$this->table}` (" . implode(', ', $columns) . ") VALUES (" . implode(', ', $placeholders) . ")";
 
         $pdo = $this->db->getConnection();
 
@@ -47,12 +45,10 @@ abstract class Repository
         return (int)$pdo->lastInsertId();
     }
 
-    /**
-     * @throws Exception
-     */
-    protected function find(string $table, array $where = []): array
+
+    protected function find(array $where = []): array
     {
-        $sql = "SELECT * FROM `{$table}`";
+        $sql = "SELECT * FROM `{$this->table}`";
         $whereParts = [];
         $bindValues = [];
 

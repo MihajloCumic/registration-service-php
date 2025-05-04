@@ -43,8 +43,6 @@ class RequestDispatcher implements Dispatcher
            $handlerChain = HandlerChainFactory::buildHandlerChain($this->container, $route->handlerNames, $route->controllerName, $route->controllerMethodName);
 
            $res = $handlerChain->handle($this->request);
-
-           http_response_code($res->statusCode);
            $res->send();
     }
 }

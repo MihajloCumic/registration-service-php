@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace Src\handler\implementations;
 
 use Exception;
+use Src\exceptions\CustomException;
+use Src\exceptions\validation\UserAlreadyExistsException;
 use Src\handler\RequestHandler;
 use Src\repository\implementations\UserRepository;
 use Src\request\Request;
@@ -17,15 +19,13 @@ class UserExistValidationHandler extends RequestHandler
 
     /**
      * @throws Exception
+     * @throws CustomException
      */
     public function handle(Request $request): Response
     {
         $email = $request->getBody()['email'];
         if($this->userRepository->doesUserWithEmailExist($email)){
-            return new Response([
-                'success' => false,
-                'errorMessage' => 'User already exists'
-            ], 400);
+            throw UserAlreadyExistsException::get([]);
         }
         return $this->next($request);
     }

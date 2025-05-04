@@ -3,16 +3,23 @@ declare(strict_types=1);
 namespace Src\repository\implementations;
 
 use Exception;
-use Src\repository\Repository;
+use Src\database\DatabaseConnection;
+use Src\repository\component\Repository;
 
 class UserRepository extends Repository
 {
+
+    public function __construct(DatabaseConnection $db)
+    {
+        parent::__construct($db, 'user');
+    }
+
     /**
      * @throws Exception
      */
     public function create(string $email, string $pass): int
     {
-        return $this->insert('user', [
+        return $this->insert([
             'email' => $email,
             'password' => $pass
         ]);

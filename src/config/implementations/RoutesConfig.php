@@ -5,7 +5,6 @@ namespace Src\config\implementations;
 use Src\config\Provider;
 use Src\container\Container;
 use Src\controller\RegistrationController;
-use Src\controller\TestController;
 use Src\enums\HttpMethod;
 use Src\handler\implementations\MatchingPasswordsHandler;
 use Src\handler\implementations\MaxMindValidationHandler;
@@ -19,14 +18,14 @@ class RoutesConfig implements Provider
     {
         $handlers = [
             RegistrationValidationHandler::class,
-            //MaxMindValidationHandler::class,
+            MaxMindValidationHandler::class,
             MatchingPasswordsHandler::class,
-            //UserExistValidationHandler::class,
+            UserExistValidationHandler::class,
         ];
 
-        $controllerName = TestController::class;
-        $controllerMethodName = 'getTest';
+        $controllerName = RegistrationController::class;
+        $controllerMethodName = 'registration';
 
-        return  (new Routes())->addRoute(HttpMethod::POST, '/test', $handlers, $controllerName, $controllerMethodName);
+        return  (new Routes())->addRoute(HttpMethod::POST, '/registration', $handlers, $controllerName, $controllerMethodName);
     }
 }

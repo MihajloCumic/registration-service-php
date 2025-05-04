@@ -1,8 +1,8 @@
 <?php
 
-namespace Src\validation\strategy;
+namespace Src\validation\strategy\impl;
 
-use Src\validation\ValidationStrategy;
+use Src\validation\strategy\ValidationStrategy;
 
 class StringStrategy implements ValidationStrategy
 {

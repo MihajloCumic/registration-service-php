@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
-namespace Src\validation\orchestrator;
+namespace Src\validation;
 
 use Src\validation\chain\ValidationChain;
 
-class Validator
+class FieldValidator implements Validator
 {
     /**
      * @var array<string, ValidationChain>

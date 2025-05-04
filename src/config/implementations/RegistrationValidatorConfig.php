@@ -5,18 +5,19 @@ namespace Src\config\implementations;
 use Src\config\Provider;
 use Src\container\Container;
 use Src\validation\chain\ValidationChain;
-use Src\validation\orchestrator\Validator;
-use Src\validation\strategy\EmailStrategy;
-use Src\validation\strategy\NotBlankStrategy;
-use Src\validation\strategy\RequiredStrategy;
-use Src\validation\strategy\StringLengthStrategy;
-use Src\validation\strategy\StringStrategy;
+use Src\validation\FieldValidator;
+use Src\validation\strategy\impl\EmailStrategy;
+use Src\validation\strategy\impl\NotBlankStrategy;
+use Src\validation\strategy\impl\RequiredStrategy;
+use Src\validation\strategy\impl\StringLengthStrategy;
+use Src\validation\strategy\impl\StringStrategy;
+use Src\validation\Validator;
 
 class RegistrationValidatorConfig implements Provider
 {
     public function configure(Container $container): Validator
     {
-        $validator = new Validator();
+        $validator = new FieldValidator();
         $emailChain = (new ValidationChain())
             ->addStrategy(new RequiredStrategy())
             ->addStrategy(new StringStrategy())

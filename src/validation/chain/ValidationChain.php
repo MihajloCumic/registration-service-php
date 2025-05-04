@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Src\validation\chain;
 
-use Src\validation\ValidationStrategy;
+use Src\validation\strategy\ValidationStrategy;
 
 class ValidationChain
 {

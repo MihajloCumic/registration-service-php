@@ -18,14 +18,14 @@ class DatabaseConnection
         ];
     }
 
+    /**
+     * @return PDO
+     * @throws PDOException
+     */
     public function getConnection(): PDO{
         if($this->pdo === null){
             $connection = "mysql:host={$this->host};dbname={$this->db};";
-            try {
-                $this->pdo = new PDO($connection, $this->user, $this->pass, $this->options);
-            }catch (PDOException $e){
-                echo $e->getMessage();
-            }
+            $this->pdo = new PDO($connection, $this->user, $this->pass, $this->options);
         }
         return $this->pdo;
     }

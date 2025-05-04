@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Src\validation\strategy;
+namespace Src\validation\strategy\impl;
 
-use Src\validation\ValidationStrategy;
+use Src\validation\strategy\ValidationStrategy;
 
 class StringLengthStrategy implements ValidationStrategy
 {
