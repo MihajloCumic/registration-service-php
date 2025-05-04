@@ -18,9 +18,6 @@ class DatabaseConnection
         ];
     }
 
-    /**
-     * @throws Exception
-     */
     public function getConnection(): PDO{
         if($this->pdo === null){
             $connection = "mysql:host={$this->host};dbname={$this->db};";
@@ -32,10 +29,5 @@ class DatabaseConnection
         }
         return $this->pdo;
     }
-
-    public function close(): void{
-        $this->pdo = null;
-    }
-
 
 }

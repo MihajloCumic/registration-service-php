@@ -14,6 +14,7 @@ class UserExistValidationHandler extends RequestHandler
     {
     }
 
+
     /**
      * @throws Exception
      */

@@ -17,6 +17,7 @@ class RegistrationValidationHandler extends RequestHandler
     {
     }
 
+
     /**
      * @throws Exception
      */

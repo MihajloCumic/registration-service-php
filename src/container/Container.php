@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Src\container;
 
-use Exception;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionException;
@@ -10,6 +9,11 @@ use ReflectionIntersectionType;
 use ReflectionParameter;
 use ReflectionUnionType;
 use Src\attributes\Provider;
+use Src\exceptions\container\BindingExistsException;
+use Src\exceptions\container\ContainerException;
+use Src\exceptions\container\NotInstantiableException;
+use Src\exceptions\container\NoTypeException;
+use Src\exceptions\container\UnionIntersectionException;
 
 class Container implements ContainerInterface
 {
@@ -23,19 +27,20 @@ class Container implements ContainerInterface
         $this->prototypes[Container::class] = $this;
     }
 
+
     /**
-     * @throws Exception
+     * @throws ContainerException
      */
     public function bind(string $id, callable|string $concrete): void
     {
         if($this->has($id)){
-            throw new Exception("Binding for class: " . $id . " , already exists.");
+            throw BindingExistsException::get([$id]);
         }
         $this->bindings[$id] = $concrete;
     }
 
     /**
-     * @throws ReflectionException
+     * @throws ReflectionException|ContainerException
      */
     public function get(string $id)
     {
@@ -68,13 +73,13 @@ class Container implements ContainerInterface
 
     /**
      * @throws ReflectionException
-     * @throws Exception
+     * @throws ContainerException
      */
     private function resolve(string $id)
     {
         $reflection = new ReflectionClass($id);
         if (! $reflection->isInstantiable()){
-            throw new Exception("Class: " . $id . " is not instantiable");
+            throw NotInstantiableException::get([$id]);
         }
 
         $constructor = $reflection->getConstructor();
@@ -119,7 +124,7 @@ class Container implements ContainerInterface
 
     /**
      * @throws ReflectionException
-     * @throws Exception
+     * @throws ContainerException
      */
     private function resolveDependencies(ReflectionParameter $parameter, string $id, array $providers)
     {
@@ -127,11 +132,11 @@ class Container implements ContainerInterface
         $type = $parameter->getType();
 
         if (! $type){
-            throw new Exception("No type was declared on: " . $name);
+            throw NoTypeException::get([$id, $name]);
         }
 
         if ($type instanceof ReflectionUnionType || $type instanceof ReflectionIntersectionType){
-            throw new Exception("Type of: " . $name . " is union or intersection.");
+            throw UnionIntersectionException::get([$id, $name]);
         }
 
         if ($type->isBuiltin()){
