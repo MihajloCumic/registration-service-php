@@ -9,6 +9,6 @@ trait ServerErrorResponseTrait
 {
     #[NoReturn] protected function sendServerError(): void
     {
-        (new Response([], 500))->send();
+        (new Response(['errorMessage' => 'Internal Server Error.'], 500))->send();
     }
 }
