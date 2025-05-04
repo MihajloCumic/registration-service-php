@@ -2,6 +2,7 @@
 
 namespace Src\config\implementations;
 
+use Exception;
 use Src\config\Provider;
 use Src\container\Container;
 use Src\database\DatabaseConnection;
@@ -9,6 +10,7 @@ use Src\database\DatabaseConnectionFactory;
 use Src\dispatcher\Dispatcher;
 use Src\dispatcher\impl\RequestDispatcher;
 use Src\enums\HttpMethod;
+use Src\exceptions\CustomException;
 use Src\executor\Executor;
 use Src\executor\factory\ControllerExecutorFactory;
 use Src\request\adapter\PHPRequest;
@@ -34,9 +36,16 @@ class ContainerConfig implements Provider
             $container->bind(Routes::class, fn(Container $container) => (new RoutesConfig())->configure($container));
             $container->bind(Executor::class, fn(Container $container) => ControllerExecutorFactory::getControllerExecutor($container));
             $container->bind(Dispatcher::class, RequestDispatcher::class);
-            $container->bind(Request::class, fn() => new PHPRequest(HttpMethod::POST, '/test', '127.0.0.1'));
-        } catch (\Exception $e) {
+            $request = new PHPRequest(HttpMethod::POST, '/test', '127.0.0.1');
+            $request->setBody([
+                'email' => 'email@gmail.com',
+                'password1' => '12345678',
+                'password2' => '12345678'
+            ]);
+            $container->bind(Request::class, fn() => $request);
+        } catch (Exception $e) {
             echo 'Something went wrong with binding.';
+        } catch (CustomException $e) {
         }
         return $container;
     }

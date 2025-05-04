@@ -3,9 +3,10 @@
 namespace Src\exceptions\container;
 
 use Exception;
+use Src\exceptions\CustomException;
 use Throwable;
 
-abstract class ContainerException extends Exception
+abstract class ContainerException extends Exception implements CustomException
 {
     protected const CONTAINER_EXCEPTION = "Container exception.\n";
 
@@ -13,6 +14,4 @@ abstract class ContainerException extends Exception
     {
         parent::__construct($message, $code, $previous);
     }
-
-    abstract public static function get(array $args): ContainerException;
 }

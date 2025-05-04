@@ -2,9 +2,11 @@
 
 namespace Src\exceptions\container;
 
+use Src\exceptions\CustomException;
+
 class NoTypeException extends ContainerException
 {
-    public static function get(array $args): ContainerException
+    public static function get(array $args): CustomException
     {
         $className = $args[0] ?? '';
         $paramName = $args[1] ?? '';

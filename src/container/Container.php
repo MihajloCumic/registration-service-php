@@ -10,10 +10,10 @@ use ReflectionParameter;
 use ReflectionUnionType;
 use Src\attributes\Provider;
 use Src\exceptions\container\BindingExistsException;
-use Src\exceptions\container\ContainerException;
 use Src\exceptions\container\NotInstantiableException;
 use Src\exceptions\container\NoTypeException;
 use Src\exceptions\container\UnionIntersectionException;
+use Src\exceptions\CustomException;
 
 class Container implements ContainerInterface
 {
@@ -29,7 +29,7 @@ class Container implements ContainerInterface
 
 
     /**
-     * @throws ContainerException
+     * @throws CustomException
      */
     public function bind(string $id, callable|string $concrete): void
     {
@@ -40,7 +40,8 @@ class Container implements ContainerInterface
     }
 
     /**
-     * @throws ReflectionException|ContainerException
+     * @throws ReflectionException
+     * @throws CustomException
      */
     public function get(string $id)
     {
@@ -73,7 +74,7 @@ class Container implements ContainerInterface
 
     /**
      * @throws ReflectionException
-     * @throws ContainerException
+     * @throws CustomException
      */
     private function resolve(string $id)
     {
@@ -124,7 +125,7 @@ class Container implements ContainerInterface
 
     /**
      * @throws ReflectionException
-     * @throws ContainerException
+     * @throws CustomException
      */
     private function resolveDependencies(ReflectionParameter $parameter, string $id, array $providers)
     {

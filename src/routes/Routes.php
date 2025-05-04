@@ -2,7 +2,6 @@
 
 namespace Src\routes;
 
-use Src\config\Provider;
 use Src\enums\HttpMethod;
 
 class Routes

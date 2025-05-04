@@ -3,7 +3,9 @@ declare(strict_types=1);
 namespace Src\handler\implementations;
 
 use Exception;
+use ReflectionException;
 use Src\container\Container;
+use Src\exceptions\CustomException;
 use Src\executor\Executor;
 use Src\executor\factory\ControllerExecutorFactory;
 use Src\handler\RequestHandler;
@@ -18,23 +20,18 @@ class ControllerHandler extends RequestHandler
     {
     }
 
+    /**
+     * @throws CustomException
+     * @throws ReflectionException
+     * @throws Exception
+     */
     public function handle(Request $request): Response
     {
-        try {
-            $executor = $this->container->get(Executor::class);
-            if($executor instanceof Executor){
-                $res = $executor->execute($this->controllerClassName, $this->controllerMethodName, [$request]);
-                return new Response($res, 200);
-            }
-        } catch (Exception $e) {
-            return new Response([
-                'success' => false,
-                'errorMessage' => 'Could not register user.'
-            ], 500);
+        $executor = $this->container->get(Executor::class);
+        if($executor instanceof Executor){
+            $res = $executor->execute($this->controllerClassName, $this->controllerMethodName, [$request]);
+            return new Response($res, 200);
         }
-        return new Response([
-            'success' => false,
-            'errorMessage' => 'executor is not Executor in ControllerHanlder.'
-        ], 500);
+        throw new Exception("Controller handler: Not of type Executor.");
     }
 }

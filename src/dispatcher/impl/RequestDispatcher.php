@@ -6,6 +6,9 @@ use Exception;
 use ReflectionException;
 use Src\container\Container;
 use Src\dispatcher\Dispatcher;
+use Src\exceptions\CustomException;
+use Src\exceptions\routes\NotOfTypeRoutesException;
+use Src\exceptions\routes\RouteDoesNotExistException;
 use Src\handler\factory\HandlerChainFactory;
 use Src\request\Request;
 use Src\routes\Routes;
@@ -18,13 +21,14 @@ class RequestDispatcher implements Dispatcher
 
     /**
      * @throws ReflectionException
+     * @throws CustomException
      * @throws Exception
      */
     public function dispatch(): void
     {
            $routes = $this->container->get(Routes::class);
            if(!$routes instanceof Routes){
-               throw new Exception("Not Routes.");
+               throw NotOfTypeRoutesException::get([]);
            }
 
            $method = $this->request->getRequestMethod();
@@ -33,8 +37,7 @@ class RequestDispatcher implements Dispatcher
            $route = $routes->getRoute($method, $path);
 
            if($route === null){
-               echo 'Route does not exist!';
-               exit();
+               throw RouteDoesNotExistException::get([$method->value, $path]);
            }
 
            $handlerChain = HandlerChainFactory::buildHandlerChain($this->container, $route->handlerNames, $route->controllerName, $route->controllerMethodName);

@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Src\exceptions\database;
 
 use Exception;
+use Throwable;
 
 class DatabaseException extends Exception
 {

@@ -6,7 +6,7 @@ use ReflectionException;
 use Src\config\implementations\ContainerConfig;
 use Src\container\Container;
 use Src\dispatcher\Dispatcher;
-use Src\exceptions\container\ContainerException;
+use Src\exceptions\CustomException;
 
 class Application
 {
@@ -23,7 +23,7 @@ class Application
             if($dispatcher instanceof Dispatcher){
                 $dispatcher->dispatch();
             }
-        } catch (ReflectionException|ContainerException $e) {
+        } catch (ReflectionException|CustomException $e) {
             echo $e->getMessage();
         }
     }

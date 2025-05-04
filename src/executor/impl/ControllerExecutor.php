@@ -1,13 +1,11 @@
 <?php
 declare(strict_types=1);
 namespace Src\executor\impl;
-use Exception;
 use ReflectionClass;
 use ReflectionException;
 use Src\container\Container;
-use Src\exceptions\container\ContainerException;
+use Src\exceptions\CustomException;
 use Src\exceptions\executor\ControllerNotFoundException;
-use Src\exceptions\executor\ExecutorException;
 use Src\exceptions\executor\RequestTypeException;
 use Src\exceptions\executor\WrongParamsArgsException;
 use Src\executor\Executor;
@@ -21,8 +19,7 @@ class ControllerExecutor implements Executor
 
     /**
      * @throws ReflectionException
-     * @throws ExecutorException
-     * @throws ContainerException
+     * @throws CustomException
      */
     public function execute(string $className, string $methodName, array $args): mixed
     {

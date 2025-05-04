@@ -3,8 +3,10 @@
 namespace Src\exceptions\executor;
 
 use Exception;
+use Src\exceptions\CustomException;
+use Throwable;
 
-abstract class ExecutorException extends Exception
+abstract class ExecutorException extends Exception implements CustomException
 {
     protected const EXECUTOR_EXCEPTION = "Executor exception.\n";
 
@@ -12,6 +14,4 @@ abstract class ExecutorException extends Exception
     {
         parent::__construct($message, $code, $previous);
     }
-
-    abstract public static function get(array $args): ExecutorException;
 }

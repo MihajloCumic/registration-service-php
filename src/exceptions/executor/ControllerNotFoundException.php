@@ -2,9 +2,11 @@
 
 namespace Src\exceptions\executor;
 
+use Src\exceptions\CustomException;
+
 class ControllerNotFoundException extends ExecutorException
 {
-    public static function get(array $args): ExecutorException
+    public static function get(array $args): CustomException
     {
         $controllerName = $args[0] ?? '';
         $methodName = $args[1] ?? '';
