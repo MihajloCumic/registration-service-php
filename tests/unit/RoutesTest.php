@@ -1,5 +1,7 @@
 <?php
 declare(strict_types=1);
+namespace Tests\unit;
+
 use PHPUnit\Framework\TestCase;
 use Src\enums\HttpMethod;
 use Src\routes\Route;
@@ -16,7 +18,6 @@ class RoutesTest extends TestCase
     }
     public function testAddsRoute(): void
     {
-        //given
         $method = HttpMethod::GET;
         $path = '/path';
         $handlerNames = [
@@ -32,10 +33,8 @@ class RoutesTest extends TestCase
             ]
         ];
 
-        //when
         $this->routes->addRoute($method, $path, $handlerNames, $controllerName, $controllerMethod);
 
-        //then
         $this->assertEquals($expected, $this->routes->getRoutes());
     }
 
