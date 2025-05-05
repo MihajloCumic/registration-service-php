@@ -46,9 +46,40 @@ abstract class Repository
         return (int)$pdo->lastInsertId();
     }
 
-    protected function newFind(): WhereBase
+    protected function find(string $table, array $where = []): array
     {
-        $sql = "SELECT * FROM `{$this->table}`";
-        return new WhereBase($sql);
+        $sql = "SELECT * FROM `{$table}`";
+        $whereParts = [];
+        $bindValues = [];
+
+        if (!empty($where)) {
+            $sql .= " WHERE ";
+            $conditions = [];
+            foreach ($where as $value) {
+                if (is_array($value) && count($value) === 3) {
+                    list($column, $operator, $conditionValue) = $value;
+                    $column = "`{$column}`";
+
+                    if ($conditionValue instanceof SqlExpression) {
+                        $conditions[] = "{$column} {$operator} {$conditionValue->getExpression()}";
+                    } else {
+                        $placeholder = ":where_" . str_replace('.', '_', $column) . "_";
+                        $conditions[] = "{$column} {$operator} {$placeholder}";
+                        $bindValues[$placeholder] = $conditionValue;
+                    }
+                }
+            }
+            $sql .= implode(' AND ', $conditions);
+        }
+        $pdo = $this->db->getConnection();
+        $stmt = $pdo->prepare($sql);
+
+        foreach ($bindValues as $placeholder => $value) {
+            $stmt->bindValue($placeholder, $value);
+        }
+
+        $stmt->execute();
+
+        return $stmt->fetchAll();
     }
 }
