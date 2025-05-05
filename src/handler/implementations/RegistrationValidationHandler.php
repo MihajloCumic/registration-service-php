@@ -11,13 +11,12 @@ use Src\exceptions\validation\ValidationException;
 use Src\handler\RequestHandler;
 use Src\request\Request;
 use Src\response\Response;
-use Src\validation\FieldValidator;
 use Src\validation\Validator;
 
 #[Provider(RegistrationValidatorConfig::class, Validator::class)]
 class RegistrationValidationHandler extends RequestHandler
 {
-    public function __construct(private readonly FieldValidator $validator)
+    public function __construct(private readonly Validator $validator)
     {
     }
 

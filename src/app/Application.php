@@ -3,12 +3,12 @@ declare(strict_types=1);
 namespace Src\app;
 
 use Dotenv\Dotenv;
+use Exception;
 use Src\config\implementations\ContainerConfig;
 use Src\container\Container;
 use Src\dispatcher\Dispatcher;
 use Src\exceptions\CustomException;
 use Src\exceptions\Manager;
-use Throwable;
 
 class Application
 {
@@ -17,7 +17,7 @@ class Application
     {
         try {
             $this->container = $containerProvider->configure(new Container());
-        } catch (Throwable|CustomException $e) {
+        } catch (Exception|CustomException $e) {
             $this->exceptionManager->resolve($e);
         }
     }
@@ -30,7 +30,7 @@ class Application
             if($dispatcher instanceof Dispatcher){
                 $dispatcher->dispatch();
             }
-        } catch (Throwable|CustomException $e) {
+        } catch (Exception|CustomException $e) {
             $this->exceptionManager->resolve($e);
         }
     }

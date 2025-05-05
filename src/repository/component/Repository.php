@@ -4,6 +4,7 @@ namespace Src\repository\component;
 
 use Exception;
 use Src\database\DatabaseConnection;
+use Src\repository\component\where\WhereBase;
 
 abstract class Repository
 {
@@ -45,41 +46,9 @@ abstract class Repository
         return (int)$pdo->lastInsertId();
     }
 
-
-    protected function find(array $where = []): array
+    protected function newFind(): WhereBase
     {
         $sql = "SELECT * FROM `{$this->table}`";
-        $whereParts = [];
-        $bindValues = [];
-
-        if (!empty($where)) {
-            $sql .= " WHERE ";
-            $conditions = [];
-            foreach ($where as $value) {
-                if (is_array($value) && count($value) === 3) {
-                    list($column, $operator, $conditionValue) = $value;
-                    $column = "`{$column}`";
-
-                    if ($conditionValue instanceof SqlExpression) {
-                        $conditions[] = "{$column} {$operator} {$conditionValue->getExpression()}";
-                    } else {
-                        $placeholder = ":where_" . str_replace('.', '_', $column) . "_";
-                        $conditions[] = "{$column} {$operator} {$placeholder}";
-                        $bindValues[$placeholder] = $conditionValue;
-                    }
-                }
-            }
-            $sql .= implode(' AND ', $conditions);
-        }
-        $pdo = $this->db->getConnection();
-        $stmt = $pdo->prepare($sql);
-
-        foreach ($bindValues as $placeholder => $value) {
-            $stmt->bindValue($placeholder, $value);
-        }
-
-        $stmt->execute();
-
-        return $stmt->fetchAll();
+        return new WhereBase($sql);
     }
 }

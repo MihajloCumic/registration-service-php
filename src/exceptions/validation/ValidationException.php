@@ -17,7 +17,7 @@ class ValidationException extends Exception implements CustomException
         foreach($args as $fieldName => $messages){
             if(is_array($messages) && !empty($messages)){
                 $msgString = implode(", ", $messages);
-                $errors[] = "${fieldName} errors: " . $msgString;
+                $errors[] = "{$fieldName} errors: " . $msgString;
             }
         }
         $errorStr = implode("\n", $errors);
